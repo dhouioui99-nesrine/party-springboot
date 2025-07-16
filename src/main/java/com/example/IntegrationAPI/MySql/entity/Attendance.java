@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Immutable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,14 +23,14 @@ public class Attendance {
     private Attendance_Act idAct;
     @Column(name = "arrival")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDateTime arrival;
+    private LocalDate arrival;
     @Column(name = "departure")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDateTime departure;
+    private LocalDate departure;
     private String description;
 
 
-    public Attendance(Long id, Users user, Attendance_Act idAct, LocalDateTime arrival, LocalDateTime departure, String description) {
+    public Attendance(Long id, Users user, Attendance_Act idAct, LocalDate arrival, LocalDate departure, String description) {
         this.id = id;
         this.user = user;
         this.idAct = idAct;
@@ -50,11 +51,11 @@ public class Attendance {
         return id;
     }
 
-    public LocalDateTime getArrival() {
+    public LocalDate getArrival() {
         return arrival;
     }
 
-    public LocalDateTime getDeparture() {
+    public LocalDate getDeparture() {
         return departure;
     }
 

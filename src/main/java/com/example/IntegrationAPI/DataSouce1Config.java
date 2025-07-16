@@ -30,10 +30,11 @@ public class DataSouce1Config {
     private Environment environment;
 
     @Bean(name = "firstDataSource")
-    @Primary
 
-    @ConfigurationProperties(prefix = "first.datasource")
-    public DataSource dataSource() {
+    @Primary
+    public DataSource firstDataSource()
+
+{
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl(environment.getProperty("first.datasource.url"));
         dataSource.setDriverClassName(environment.getProperty("first.datasource.driver-class-name"));
@@ -42,11 +43,11 @@ public class DataSouce1Config {
         return dataSource;
     }
 
-    @Primary
+
     @Bean(name = "firstEntityMangerFactoryBean")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-        bean.setDataSource(dataSource());
+        bean.setDataSource(firstDataSource());
         bean.setPackagesToScan("com.example.IntegrationAPI.MySql.entity");
 
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
@@ -62,7 +63,7 @@ public class DataSouce1Config {
     }
 
     @Bean(name = "firstTransactionManager")
-    @Primary
+
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setEntityManagerFactory(entityManagerFactoryBean().getObject());

@@ -1,6 +1,7 @@
 package com.example.IntegrationAPI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -28,7 +29,7 @@ public class DataSouce3Config {
 
     @Bean(name = "thirdDataSource")
     @Primary
-    public DataSource dataSource() {
+    public DataSource thirdDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl(environment.getProperty("third.datasource.url"));
         dataSource.setDriverClassName(environment.getProperty("third.datasource.driver-class-name"));
@@ -37,11 +38,11 @@ public class DataSouce3Config {
         return dataSource;
     }
 
-    @Primary
+
     @Bean(name = "thirdEntityMangerFactoryBean")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-        bean.setDataSource(dataSource());
+        bean.setDataSource(thirdDataSource());
         bean.setPackagesToScan("com.example.IntegrationAPI.Base3.model");
 
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
@@ -57,7 +58,7 @@ public class DataSouce3Config {
     }
 
     @Bean(name = "thirdTransactionManager")
-    @Primary
+
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setEntityManagerFactory(entityManagerFactoryBean().getObject());

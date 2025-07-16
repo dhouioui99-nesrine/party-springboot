@@ -30,7 +30,7 @@ public class DataSouce2Config {
 
     @Bean(name = "secondDataSource")
     @Primary
-    public DataSource dataSource() {
+    public DataSource secondDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl(environment.getProperty("second.datasource.url"));
         dataSource.setDriverClassName(environment.getProperty("second.datasource.driverClassName"));
@@ -39,11 +39,11 @@ public class DataSouce2Config {
         return dataSource;
     }
 
-    @Primary
+
     @Bean(name = "secondEntityMangerFactoryBean")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-        bean.setDataSource(dataSource());
+        bean.setDataSource(secondDataSource());
         bean.setPackagesToScan("com.example.IntegrationAPI.Postgres.model");
 
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
@@ -59,7 +59,7 @@ public class DataSouce2Config {
     }
 
     @Bean(name = "secondTransactionManager")
-    @Primary
+
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setEntityManagerFactory(entityManagerFactoryBean().getObject());

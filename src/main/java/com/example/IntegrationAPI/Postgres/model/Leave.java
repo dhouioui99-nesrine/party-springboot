@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Immutable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -23,25 +24,28 @@ public class Leave {
 
     @Column(name = "start_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd  HH:mm:ss")
-    private LocalDateTime start;
+    private LocalDate start;
 
     @Column(name = "end_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd  HH:mm:ss")
-    private LocalDateTime  end;
+    private LocalDate  end;
 
     @Column(name = "apply_reason")
     private String reason ;
 
     @Column(name = "leave_day")
     private Double day ;
+    @OneToOne
+    @JoinColumn(name = "pay_code_id")
+    private Paycode paycode;
 
-
-    public Leave(Workflow workflow, LocalDateTime start, LocalDateTime end, String reason, Double day) {
+    public Leave(Workflow workflow, LocalDate start, LocalDate end, String reason, Double day , Paycode paycode) {
         this.workflow = workflow;
         this.start = start;
         this.end = end;
         this.reason = reason;
         this.day = day;
+        this.paycode=paycode;
     }
 
     public Leave() {
@@ -52,11 +56,11 @@ public class Leave {
         return workflow;
     }
 
-    public LocalDateTime getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public LocalDateTime getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
@@ -68,6 +72,7 @@ public class Leave {
         return day;
     }
 
-
-
+    public Paycode getPaycode() {
+        return paycode;
+    }
 }
