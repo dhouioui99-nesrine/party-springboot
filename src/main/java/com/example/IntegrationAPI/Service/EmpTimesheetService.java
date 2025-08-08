@@ -108,4 +108,34 @@ public class EmpTimesheetService {
 
 
         }
+
+
+    public List<EmpTimesheet> getMatchingEmployeesTimesheets() {
+        List<Employee> employees = employeeRepository.findAll(); // Récupérer tous les employés (PostgreSQL)
+        List<Timesheets> att = timesheetRepository.findAll(); // Récupérer tous les timesheet (MySQL)
+        List<EmpTimesheet> matchingList = new ArrayList<>();
+
+        for (Timesheets timesheet : att) {
+            String fullName = timesheet.getUser().getFirstname() + " " +  timesheet.getUser().getLastname(); // Concaténer prénom + nom
+
+            for (Employee employee : employees) {
+                if (employee.getFirstname().equalsIgnoreCase(fullName)) { // Comparer
+                    // Ajouter à la liste
+                    matchingList.add(new EmpTimesheet(
+                            employee.getEmpCode(),
+                            timesheet.getPeriod(),
+                            timesheet.getStart(),
+                            timesheet.getEnd(),
+                            timesheet.getUser().getId(),
+                            employee.getLastname()
+
+                    ));
+                }
+            }
+        }
+
+        return matchingList;
+
+
+    }
     }

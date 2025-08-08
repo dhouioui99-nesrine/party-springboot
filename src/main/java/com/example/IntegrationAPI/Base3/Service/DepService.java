@@ -2,6 +2,7 @@ package com.example.IntegrationAPI.Base3.Service;
 
 import com.example.IntegrationAPI.Base3.Repository.DepRepo;
 import com.example.IntegrationAPI.Base3.model.Dep;
+import com.example.IntegrationAPI.Base3.model.Empl;
 import com.example.IntegrationAPI.Postgres.model.Departement;
 import com.example.IntegrationAPI.Postgres.repository.DepartementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,13 @@ public class DepService {
         }).collect(Collectors.toList());
 
         depRepository.saveAll(deps);
+    }
+
+    public List<Dep> getAllEmployees() {
+
+        return  depRepository.findAll();
+
+
     }
 }
 
