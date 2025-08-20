@@ -2,30 +2,23 @@ package com.example.IntegrationAPI.Base3.model;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "Projet")
-public class Projet {
+@Table(name = "Tracker")
+public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-    @Lob
-    @Column(columnDefinition = "LONGTEXT")
     private String description ;
-    private String status ;
 
-    public Projet(Long id, String name, String description, String status) {
+    public Ticket(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.status = status;
     }
 
-    public Projet() {
+    public Ticket() {
     }
-
 
     public Long getId() {
         return id;
@@ -49,13 +42,5 @@ public class Projet {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

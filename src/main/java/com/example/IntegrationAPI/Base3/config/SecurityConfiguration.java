@@ -40,6 +40,12 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults()) // ✅ Active CORS
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api/auth/signup",
+                                "/api/auth/login",
+                                "/api/auth/verify" // ✅ ici
+                        ).permitAll()
+                        .requestMatchers("/api/B3/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/**").permitAll() // ✅ Permet toutes les routes auth, y compris signup
                         .requestMatchers("/api/v1/management/**").hasRole(ADMIN.name())

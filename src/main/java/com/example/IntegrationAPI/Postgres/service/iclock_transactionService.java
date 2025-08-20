@@ -8,6 +8,7 @@ import com.example.IntegrationAPI.Postgres.model.iclock_transaction;
 import com.example.IntegrationAPI.Postgres.repository.EmployeeRepository;
 import com.example.IntegrationAPI.Postgres.repository.iclock_transactionRepository;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,9 @@ public class iclock_transactionService {
 
         private String deptName;
         private String date;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private ZonedDateTime premierPointage;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private ZonedDateTime dernierPointage;
 
         public PointageResult(Integer empId, String empCode,String empName, String deptName, String date, ZonedDateTime premierPointage, ZonedDateTime dernierPointage) {
@@ -46,6 +49,7 @@ public class iclock_transactionService {
             this.empName = empName;
             this.deptName = deptName;
             this.date = date;
+
             this.premierPointage = premierPointage;
             this.dernierPointage = dernierPointage;
         }
@@ -59,8 +63,9 @@ public class iclock_transactionService {
         public String getEmpName() { return empName; }
         public String getDeptName() { return deptName; }
         public String getDate() { return date; }
-        public ZonedDateTime getPremierPointage() { return premierPointage; }
-        public ZonedDateTime getDernierPointage() { return dernierPointage; }
+
+        public ZonedDateTime getPremierPointage() { return premierPointage.plusHours(1); }
+        public ZonedDateTime getDernierPointage() { return dernierPointage.plusHours(1); }
     }
 
     public List<PointageResult> getPremierEtDernierPointageParJour() {

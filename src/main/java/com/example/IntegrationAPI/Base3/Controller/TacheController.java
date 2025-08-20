@@ -1,8 +1,9 @@
 package com.example.IntegrationAPI.Base3.Controller;
 
-import com.example.IntegrationAPI.Base3.Service.ProjectService;
-import com.example.IntegrationAPI.Base3.model.Empl;
+import com.example.IntegrationAPI.Base3.Service.TacheService;
+import com.example.IntegrationAPI.Base3.Service.TicketService;
 import com.example.IntegrationAPI.Base3.model.Projet;
+import com.example.IntegrationAPI.Base3.model.Tache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/B3/projet")
+@RequestMapping("/api/B3/tache")
 @CrossOrigin(origins = "http://localhost:4200")
-public class ProjetController {
+public class TacheController {
+
     @Autowired
-    private ProjectService transformationService;
+    private TacheService transformationService;
 
     @PostMapping("/transform")
     public ResponseEntity<String> transform() {
@@ -23,19 +25,19 @@ public class ProjetController {
     }
     // afficher ALLL
     @GetMapping
-    public List<Projet> getAll() {
+    public List<Tache> getAll() {
         return transformationService.getAllEmployees();
     }
     // Ajouter
     @PostMapping
-    public Projet create(@RequestBody Projet empl) {
+    public Tache create(@RequestBody Tache empl) {
         return transformationService.save(empl);
     }
 
     // afficher par empCode
     @GetMapping("/{empCode}")
-    public ResponseEntity<List<Projet>> getCongeByCode(@PathVariable("empCode") String empCode) {
-        List<Projet> empl = transformationService.getEmployeeById(empCode);
+    public ResponseEntity<List<Tache>> getCongeByCode(@PathVariable("empCode") String empCode) {
+        List<Tache> empl = transformationService.getEmployeeById(empCode);
 
         if (empl.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -46,7 +48,7 @@ public class ProjetController {
 
     //Modifier
     @PutMapping("/{empCode}")
-    public Projet updateByEmpCode(@PathVariable String empCode, @RequestBody Projet updatedData) {
+    public Tache updateByEmpCode(@PathVariable String empCode, @RequestBody Tache updatedData) {
         return transformationService.updateByEmpCode(empCode, updatedData);
     }
 //supprimer

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api")
+@RequestMapping("/api/valid-transactions")
 
 public class iclock_transactionController {
 
@@ -27,7 +27,7 @@ public class iclock_transactionController {
     }
 
     // API pour les transactions valides
-    @GetMapping("/valid-transactions")
+
     public List<PointageResult> getValidTransactions() {
         return iclockTransactionService.getPremierEtDernierPointageParJour();
     }
