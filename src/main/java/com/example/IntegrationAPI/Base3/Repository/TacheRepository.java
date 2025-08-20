@@ -11,8 +11,7 @@ import java.util.Optional;
 @Repository
 public interface TacheRepository extends JpaRepository<Tache, Long> {
 
-    List<Tache> findByEmpCode(String empCode);
-    Optional<Tache> findFirstByEmpCode(String empCode);
-    boolean existsByEmpCode(String empCode);
-    boolean existsByEmail (String email) ;
+    Optional<Tache> findFirstById(Long id);
+    Optional<Tache> findById(Long id);
+
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TacheService {
@@ -59,22 +60,21 @@ public class TacheService {
     public Tache save(Tache empl) {
         return tacheRepository.save(empl);
     }
-    //delete  par empcode
-    public void deleteByEmpCode(String empCode) {
-        List<Tache> empl = tacheRepository.findByEmpCode(empCode);
+    //delete  par id
+    public void deleteById(Long id) {
+        Optional<Tache> empl = tacheRepository.findById(id);
         if (empl.isEmpty()) {
-            throw new RuntimeException("No employee found with empCode: " + empCode);
+            throw new RuntimeException("No employee found with empCode: " + id);
         }
-        for (Tache empls : empl) {
-            tacheRepository.delete(empls);
-        }
+        // Ici on sait que l'objet existe
+        tacheRepository.delete(empl.get());
     }
 
 
-    // update  par empcode
-    public Tache updateByEmpCode(String empCode, Tache updatedData) {
-        Tache empl = tacheRepository.findFirstByEmpCode(empCode)
-                .orElseThrow(() -> new RuntimeException("employe not found with empCode: " + empCode));
+    // update  par id
+    public Tache updateById(Long id, Tache updatedData) {
+        Tache empl = tacheRepository.findFirstById(id)
+                .orElseThrow(() -> new RuntimeException("employe not found with empCode: " + id));
 
         empl.setTracker(updatedData.getTracker());
         empl.setProject(updatedData.getProject());
@@ -85,18 +85,14 @@ public class TacheService {
         empl.setStart_date(updatedData.getStart_date());
         empl.setAssigned(updatedData.getAssigned());
 
-
         return tacheRepository.save(empl);
     }
-    // afficher les conges par empCode
-    public List<Tache> getEmployeeById(String empCode) {
-        return tacheRepository.findByEmpCode(empCode);
+    // afficher l par id
+    public Tache getEmployeeById(Long id) {
+        return tacheRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tache not found with id: " + id));
     }
-
 
 
 }
-
-
-
 

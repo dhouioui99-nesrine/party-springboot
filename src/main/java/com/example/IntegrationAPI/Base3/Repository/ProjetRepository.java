@@ -10,8 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProjetRepository extends JpaRepository<Projet, Long> {
-    List<Projet> findByEmpCode(String empCode);
-    Optional<Projet> findFirstByEmpCode(String empCode);
-    boolean existsByEmpCode(String empCode);
-    boolean existsByEmail (String email) ;
+        Optional<Projet> findFirstById(Long id);
+    Optional<Projet> findById(Long id);
 }

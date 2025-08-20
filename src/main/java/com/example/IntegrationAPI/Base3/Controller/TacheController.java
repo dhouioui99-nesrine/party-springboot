@@ -34,29 +34,25 @@ public class TacheController {
         return transformationService.save(empl);
     }
 
-    // afficher par empCode
-    @GetMapping("/{empCode}")
-    public ResponseEntity<List<Tache>> getCongeByCode(@PathVariable("empCode") String empCode) {
-        List<Tache> empl = transformationService.getEmployeeById(empCode);
-
-        if (empl.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+    // afficher par id
+    @GetMapping("/{id}")
+    public ResponseEntity<Tache> getCongeById(@PathVariable("id") Long id) {
+        Tache empl = transformationService.getEmployeeById(id);
 
         return ResponseEntity.ok(empl);
     }
 
     //Modifier
-    @PutMapping("/{empCode}")
-    public Tache updateByEmpCode(@PathVariable String empCode, @RequestBody Tache updatedData) {
-        return transformationService.updateByEmpCode(empCode, updatedData);
+    @PutMapping("/{id}")
+    public Tache updateByEmpCode(@PathVariable Long id, @RequestBody Tache updatedData) {
+        return transformationService.updateById(id, updatedData);
     }
 //supprimer
 
 
-    @DeleteMapping("/{empCode}")
-    public void deleteByEmpCode(@PathVariable String empCode) {
-        transformationService.deleteByEmpCode(empCode);
+    @DeleteMapping("/{id}")
+    public void deleteByEmpCode(@PathVariable Long id) {
+        transformationService.deleteById(id);
     }
 
 

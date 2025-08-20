@@ -32,29 +32,25 @@ public class ProjetController {
         return transformationService.save(empl);
     }
 
-    // afficher par empCode
-    @GetMapping("/{empCode}")
-    public ResponseEntity<List<Projet>> getCongeByCode(@PathVariable("empCode") String empCode) {
-        List<Projet> empl = transformationService.getEmployeeById(empCode);
-
-        if (empl.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+    // afficher par id
+    @GetMapping("/{id}")
+    public ResponseEntity<Projet> getCongeById(@PathVariable("id") Long id) {
+        Projet empl = transformationService.getEmployeeById(id);
 
         return ResponseEntity.ok(empl);
     }
 
     //Modifier
-    @PutMapping("/{empCode}")
-    public Projet updateByEmpCode(@PathVariable String empCode, @RequestBody Projet updatedData) {
-        return transformationService.updateByEmpCode(empCode, updatedData);
+    @PutMapping("/{id}")
+    public Projet updateByEmpCode(@PathVariable Long id, @RequestBody Projet updatedData) {
+        return transformationService.updateById(id, updatedData);
     }
 //supprimer
 
 
-    @DeleteMapping("/{empCode}")
-    public void deleteByEmpCode(@PathVariable String empCode) {
-        transformationService.deleteByEmpCode(empCode);
+    @DeleteMapping("/{id}")
+    public void deleteByEmpCode(@PathVariable Long id) {
+        transformationService.deleteById(id);
     }
 
 
