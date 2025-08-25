@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.core.GrantedAuthority;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,26 +101,39 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         System.out.println(request.getEmail());
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
+
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
+
+        AuthenticationResponse response = new AuthenticationResponse();
+
+        // MFA activé
         if (user.isMfaEnabled()) {
-            AuthenticationResponse response = new AuthenticationResponse();
             response.setAccessToken("");
             response.setRefreshToken("");
             response.setMfaEnabled(true);
             return response;
         }
+
+        // JWT token
         var jwtToken = jwtService.generateToken(user);
-        // var refreshToken = jwtService.generateRefreshToken(user);
-        AuthenticationResponse response = new AuthenticationResponse();
         response.setAccessToken(jwtToken);
         response.setMfaEnabled(false);
+
+        // Récupérer le rôle de l'utilisateur et le convertir en String
+        if (user.getRole() != null) {
+            response.setRoles(List.of(user.getRole().name())); // ici tu envoies une liste avec 1 seul élément
+        } else {
+            response.setRoles(Collections.emptyList());
+        }
+
         return response;
     }
 
