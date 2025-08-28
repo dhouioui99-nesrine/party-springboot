@@ -43,8 +43,11 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/api/auth/signup",
                                 "/api/auth/login",
+                                "/api/auth/logout",
                                 "/api/auth/verify" // ✅ ici
                         ).permitAll()
+                        .requestMatchers("/api/B3/tache/**").permitAll()
+                        .requestMatchers("/api/B3/tache/projet/**").permitAll()
                         .requestMatchers("/api/B3/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/**").permitAll() // ✅ Permet toutes les routes auth, y compris signup

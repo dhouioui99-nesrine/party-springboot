@@ -15,7 +15,9 @@ public class Tache {
 
     private String tracker;
 
-    private String project;
+    @ManyToOne
+    @JoinColumn(name = "projet_id")
+    private Projet projet;
 
     private String subject;
      @Lob
@@ -31,10 +33,10 @@ public class Tache {
 
     private String assigned;
 
-    public Tache(Long id, String tracker, String project, String subject, String description, Date due_date, String statuts, Date start_date, String assigned) {
+    public Tache(Long id, String tracker,Projet projet, String subject, String description, Date due_date, String statuts, Date start_date, String assigned) {
         this.id = id;
         this.tracker = tracker;
-        this.project = project;
+        this.projet = projet;
         this.subject = subject;
         this.description = description;
         this.due_date = due_date;
@@ -63,12 +65,12 @@ public class Tache {
         this.tracker = tracker;
     }
 
-    public String getProject() {
-        return project;
+    public Projet getProjet() {
+        return projet;
     }
 
-    public void setProject(String project) {
-        this.project = project;
+    public void setProjet(Projet projet) {
+        this.projet = projet;
     }
 
     public String getSubject() {

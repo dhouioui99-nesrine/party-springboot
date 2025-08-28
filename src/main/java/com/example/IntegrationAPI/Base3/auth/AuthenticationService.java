@@ -102,6 +102,7 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         System.out.println(request.getEmail());
 
+        // Vérifier identifiants
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -109,29 +110,32 @@ public class AuthenticationService {
                 )
         );
 
+        // Récupérer l'utilisateur
         var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
         AuthenticationResponse response = new AuthenticationResponse();
 
-        // MFA activé
-        if (user.isMfaEnabled()) {
-            response.setAccessToken("");
-            response.setRefreshToken("");
-            response.setMfaEnabled(true);
-            return response;
-        }
-
-        // JWT token
-        var jwtToken = jwtService.generateToken(user);
-        response.setAccessToken(jwtToken);
-        response.setMfaEnabled(false);
-
-        // Récupérer le rôle de l'utilisateur et le convertir en String
+        // Remplir informations utilisateur
+        response.setEmpCode(user.getEmpCode());
+        response.setLastname(user.getLastname());
         if (user.getRole() != null) {
-            response.setRoles(List.of(user.getRole().name())); // ici tu envoies une liste avec 1 seul élément
+            response.setRoles(List.of(user.getRole().name()));
         } else {
             response.setRoles(Collections.emptyList());
+        }
+
+        // Gestion MFA
+        if (user.isMfaEnabled()) {
+            response.setAccessToken(""); // peut rester vide
+            response.setRefreshToken("");
+            response.setMfaEnabled(true);
+        } else {
+            // JWT token
+            String jwtToken = jwtService.generateToken(user);
+            response.setAccessToken(jwtToken);
+            response.setRefreshToken(""); // ou gérer refresh token
+            response.setMfaEnabled(false);
         }
 
         return response;
@@ -203,5 +207,11 @@ public class AuthenticationService {
 
     public boolean emailExists(String email) {
         return emplRepository.existsByEmail(email);
+    }
+    public void logout(String email) {
+        // Exemple : invalidation côté serveur
+        // refreshTokenRepository.deleteByUserId(userId);
+
+        System.out.println("User " + email + " logged out.");
     }
 }

@@ -6,7 +6,8 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AuthenticationResponse {
-
+  private String empCode;
+  private String lastname;
   private String accessToken;
   private String refreshToken;
   private boolean mfaEnabled;
@@ -16,12 +17,14 @@ public class AuthenticationResponse {
   public AuthenticationResponse() {
   }
 
-  public AuthenticationResponse(String accessToken, String refreshToken, boolean mfaEnabled, String secretImageUri, List<String> roles) {
+  public AuthenticationResponse(String empCode, String lastname,String accessToken, String refreshToken, boolean mfaEnabled, String secretImageUri, List<String> roles) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
     this.mfaEnabled = mfaEnabled;
     this.secretImageUri = secretImageUri;
     this.roles=roles;
+    this.empCode=empCode;
+    this.lastname=lastname;
   }
 
   public String getAccessToken() {
@@ -62,5 +65,21 @@ public class AuthenticationResponse {
 
   public void setRoles(List<String> roles) {
     this.roles = roles;
+  }
+
+  public String getEmpCode() {
+    return empCode;
+  }
+
+  public void setEmpCode(String empCode) {
+    this.empCode = empCode;
+  }
+
+  public String getLastname() {
+    return lastname;
+  }
+
+  public void setLastname(String lastname) {
+    this.lastname = lastname;
   }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -87,6 +88,19 @@ public class AuthenticationController {
     public ResponseEntity<Boolean> checkEmailExists(@RequestParam String email) {
         boolean exists = repository.existsByEmail(email);
         return ResponseEntity.ok(exists);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest().body("userId is required");
+        }
+
+        service.logout(email);
+
+        return ResponseEntity.ok("Logout successful");
     }
 
 }

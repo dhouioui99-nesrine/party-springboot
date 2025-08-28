@@ -1,11 +1,13 @@
 package com.example.IntegrationAPI.Base3.Service;
 
+import com.example.IntegrationAPI.Base3.Repository.ProjetRepository;
 import com.example.IntegrationAPI.Base3.Repository.TacheRepository;
 import com.example.IntegrationAPI.Base3.Repository.TicketRepository;
 import com.example.IntegrationAPI.Base3.model.Projet;
 import com.example.IntegrationAPI.Base3.model.Tache;
 import com.example.IntegrationAPI.Base3.model.Ticket;
 import com.example.IntegrationAPI.MySql.Repository.IssuesRepository;
+import com.example.IntegrationAPI.MySql.entity.Project;
 import com.example.IntegrationAPI.MySql.entity.Tracker;
 
 import com.example.IntegrationAPI.MySql.entity.issues;
@@ -23,6 +25,10 @@ public class TacheService {
     @Autowired
     private TacheRepository tacheRepository;
 
+    @Autowired
+    private  ProjetRepository projetRepository;
+
+
 
 
     public void migrerEmployees() {
@@ -31,7 +37,15 @@ public class TacheService {
         for (issues emp : employees) {
             Tache newEmp = new Tache();
         newEmp.setTracker(emp.getTrackerId().getName());
-            newEmp.setProject(emp.getProjectId().getName());
+            // Créer un objet Projet à partir de Project
+            if (emp.getProjectId() != null) {
+                Project oldProject = emp.getProjectId();
+                Projet projet = new Projet();
+                projet.setId(oldProject.getId());        // si tu veux garder l’ID
+                projet.setName(oldProject.getName());    // mapper le nom
+                // mapper d’autres champs si nécessaire
+                newEmp.setProjet(projet);
+            }
             newEmp.setSubject(emp.getSubject());
             newEmp.setDescription(emp.getDescription());
             newEmp.setStatuts(emp.getStatut().getName());
@@ -77,7 +91,7 @@ public class TacheService {
                 .orElseThrow(() -> new RuntimeException("employe not found with empCode: " + id));
 
         empl.setTracker(updatedData.getTracker());
-        empl.setProject(updatedData.getProject());
+        empl.setProjet(updatedData.getProjet());
         empl.setDescription(updatedData.getDescription());
         empl.setStatuts(updatedData.getStatuts());
         empl.setSubject(updatedData.getSubject());
@@ -94,5 +108,18 @@ public class TacheService {
     }
 
 
+    public List<Tache> getTachesByProjetId(Long projetId) {
+        return tacheRepository.findByProjetId(projetId);
+    }
+
+
+    // Ajouter une tâche à un projet
+    public Tache ajouterTacheAuProjet(Long projetId, Tache tache) {
+        Projet projet = projetRepository.findById(projetId)
+                .orElseThrow(() -> new RuntimeException("Projet introuvable avec id: " + projetId));
+
+        tache.setProjet(projet); // Associer projet à la tâche
+        return tacheRepository.save(tache);
+    }
 }
 
